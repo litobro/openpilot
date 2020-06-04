@@ -4,8 +4,8 @@ import numpy as np
 import unittest
 
 from common.transformations.orientation import euler2quat, quat2euler, euler2rot, rot2euler, \
-                                               rot2quat, quat2rot, \
-                                               ned_euler_from_ecef
+                                               rot2quat, quat2rot, quat_from_euler, \
+                                               ned_euler_from_ecef, ecef_euler_from_ned
 
 eulers = np.array([[ 1.46520501,  2.78688383,  2.92780854],
        [ 4.86909526,  3.60618161,  4.30648981],
@@ -60,7 +60,8 @@ class TestOrientation(unittest.TestCase):
   def test_euler_ned(self):
     for i in range(len(eulers)):
       np.testing.assert_allclose(ned_eulers[i], ned_euler_from_ecef(ecef_positions[i], eulers[i]), rtol=1e-7)
-      #np.testing.assert_allclose(eulers[i], ecef_euler_from_ned(ecef_positions[i], ned_eulers[i]), rtol=1e-7)
+      np.testing.assert_allclose(quat_from_euler(eulers[i]),
+                                 quat_from_euler(ecef_euler_from_ned(ecef_positions[i], ned_eulers[i])), rtol=1e-7)
     np.testing.assert_allclose(ned_eulers, ned_euler_from_ecef(ecef_positions, eulers), rtol=1e-7)
 
 
