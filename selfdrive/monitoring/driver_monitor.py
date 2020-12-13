@@ -212,8 +212,9 @@ class DriverStatus():
     awareness_prev = self.awareness
 
     if self.face_detected and self.hi_stds * DT_DMON > _HI_STD_TIMEOUT and self.hi_std_alert_enabled:
-      events.add(EventName.driverMonitorLowAcc)
-      self.hi_std_alert_enabled = False # only showed once until orange prompt resets it
+      # events.add(EventName.driverMonitorLowAcc)
+      # self.hi_std_alert_enabled = False # only showed once until orange prompt resets it
+      pass
 
     if (driver_attentive and self.face_detected and self.pose.low_std and self.awareness > 0):
       # only restore awareness when paying attention and alert is not red
@@ -245,4 +246,5 @@ class DriverStatus():
       alert = EventName.preDriverDistracted if self.active_monitoring_mode else EventName.preDriverUnresponsive
 
     if alert is not None:
-      events.add(alert)
+      pass
+      # events.add(alert)

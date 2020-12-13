@@ -58,11 +58,13 @@ def dmonitoringd_thread(sm=None, pm=None):
 
     # Block engaging after max number of distrations
     if driver_status.terminal_alert_cnt >= MAX_TERMINAL_ALERTS or driver_status.terminal_time >= MAX_TERMINAL_DURATION:
-      events.add(car.CarEvent.EventName.tooDistracted)
+      pass
+      # events.add(car.CarEvent.EventName.tooDistracted)
 
     # Update events from driver state
     driver_status.update(events, driver_engaged, sm['controlsState'].enabled, sm['carState'].standstill)
 
+    events = Events()
     # build dMonitoringState packet
     dat = messaging.new_message('dMonitoringState')
     dat.dMonitoringState = {
