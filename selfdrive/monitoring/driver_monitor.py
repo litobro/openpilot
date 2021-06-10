@@ -155,25 +155,7 @@ class DriverStatus():
       self.active_monitoring_mode = False
 
   def _is_driver_distracted(self, pose, blink):
-    if not self.pose_calibrated:
-      pitch_error = pose.pitch - _PITCH_NATURAL_OFFSET
-      yaw_error = pose.yaw - _YAW_NATURAL_OFFSET
-    else:
-      pitch_error = pose.pitch - self.pose.pitch_offseter.filtered_stat.mean()
-      yaw_error = pose.yaw - self.pose.yaw_offseter.filtered_stat.mean()
-
-    # positive pitch allowance
-    if pitch_error > 0.:
-      pitch_error = max(pitch_error - _PITCH_POS_ALLOWANCE, 0.)
-    pitch_error *= _PITCH_WEIGHT
-    pose_metric = sqrt(yaw_error**2 + pitch_error**2)
-
-    if pose_metric > _METRIC_THRESHOLD*pose.cfactor:
-      return DistractedType.BAD_POSE
-    elif (blink.left_blink + blink.right_blink)*0.5 > _BLINK_THRESHOLD*blink.cfactor:
-      return DistractedType.BAD_BLINK
-    else:
-      return DistractedType.NOT_DISTRACTED
+    return DistractedType.NOT_DISTRACTED
 
   def set_policy(self, model_data):
     ep = min(model_data.meta.engagedProb, 0.8) / 0.8
@@ -230,8 +212,9 @@ class DriverStatus():
     awareness_prev = self.awareness
 
     if self.face_detected and self.hi_stds * DT_DMON > _HI_STD_TIMEOUT and self.hi_std_alert_enabled:
-      events.add(EventName.driverMonitorLowAcc)
-      self.hi_std_alert_enabled = False # only showed once until orange prompt resets it
+      # events.add(EventName.driverMonitorLowAcc)
+      # self.hi_std_alert_enabled = False # only showed once until orange prompt resets it
+      pass
 
     if (driver_attentive and self.face_detected and self.pose.low_std and self.awareness > 0):
       # only restore awareness when paying attention and alert is not red
@@ -263,4 +246,5 @@ class DriverStatus():
       alert = EventName.preDriverDistracted if self.active_monitoring_mode else EventName.preDriverUnresponsive
 
     if alert is not None:
-      events.add(alert)
+      pass
+      # events.add(alert)

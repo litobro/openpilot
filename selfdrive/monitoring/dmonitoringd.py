@@ -51,7 +51,8 @@ def dmonitoringd_thread(sm=None, pm=None):
 
     # Block engaging after max number of distrations
     if driver_status.terminal_alert_cnt >= MAX_TERMINAL_ALERTS or driver_status.terminal_time >= MAX_TERMINAL_DURATION:
-      events.add(car.CarEvent.EventName.tooDistracted)
+      # events.add(car.CarEvent.EventName.tooDistracted)
+      pass
 
     # Update events from driver state
     driver_status.update(events, driver_engaged, sm['controlsState'].enabled, sm['carState'].standstill)
@@ -60,16 +61,16 @@ def dmonitoringd_thread(sm=None, pm=None):
     dat = messaging.new_message('driverMonitoringState')
     dat.driverMonitoringState = {
       "events": events.to_msg(),
-      "faceDetected": driver_status.face_detected,
-      "isDistracted": driver_status.driver_distracted,
-      "awarenessStatus": driver_status.awareness,
+      "faceDetected": True,
+      "isDistracted": False,
+      "awarenessStatus": 1,
       "posePitchOffset": driver_status.pose.pitch_offseter.filtered_stat.mean(),
       "posePitchValidCount": driver_status.pose.pitch_offseter.filtered_stat.n,
       "poseYawOffset": driver_status.pose.yaw_offseter.filtered_stat.mean(),
       "poseYawValidCount": driver_status.pose.yaw_offseter.filtered_stat.n,
       "stepChange": driver_status.step_change,
-      "awarenessActive": driver_status.awareness_active,
-      "awarenessPassive": driver_status.awareness_passive,
+      "awarenessActive": 1.,
+      "awarenessPassive": 1.,
       "isLowStd": driver_status.pose.low_std,
       "hiStdCount": driver_status.hi_stds,
       "isActiveMode": driver_status.active_monitoring_mode,
